@@ -29,7 +29,7 @@ app.get("/signup", (req, res) => {
   res.render("signup", { title: "Welcome to the Server" });
 });
 
-app.get("/dashboard", (req, res) => {
+app.get("/dashboardzzzzz", (req, res) => {
   res.render("dashboard", { title: "Welcome to the Server" });
 });
 

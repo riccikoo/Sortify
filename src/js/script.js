@@ -3,6 +3,37 @@ const sidebarToggle = document.querySelector('.sidebar-toggle')
 const sidebarOverlay = document.querySelector('.sidebar-overlay')
 const sidebarMenu = document.querySelector('.sidebar-menu')
 const main = document.querySelector('.main')
+
+document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(loginForm);
+      const payload = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch("/api/signin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.redirect) {
+          window.location.href = data.redirect;
+        } else {
+          alert(data.message || "Login gagal");
+        }
+      } catch (err) {
+        console.error("Login error:", err);
+      }
+    });
+  }
+});
+
 sidebarToggle.addEventListener('click', function (e) {
     e.preventDefault()
     main.classList.toggle('active')

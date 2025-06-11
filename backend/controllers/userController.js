@@ -48,22 +48,20 @@ exports.createUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    // log untuk debugging
-    console.log("loginUser called", email);
-
     const user = await User.findOne({ where: { email } });
-    if (!user) return res.status(400).send("User not found");
+    if (!user) return res.status(400).json({ message: "User not found" });
 
     const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.status(400).send("Invalid password");
+    if (!valid) return res.status(400).json({ message: "Invalid password" });
 
     req.session.userId = user.id;
     req.session.role = user.role || "user";
 
-    res.redirect('/dashboard');
+    return res.redirect('/dashboard');
   } catch (err) {
-    res.status(500).send("Server error: " + err.message);
+    return res.redirect('/login');
   }
 };
+
 
 
